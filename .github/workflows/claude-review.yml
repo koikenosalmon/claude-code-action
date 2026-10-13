@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
 
     steps:
       - name: Checkout repository
