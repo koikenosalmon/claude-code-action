@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
 
     steps:
       - name: Checkout repository
@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 1
 
       - name: Auto review PR
-        uses: koikenosalmon/claude-code-action@beta  # Fork with OAuth support
+        uses: koikenosalmon/claude-code-action@21a67873342f61918df7fdba9fbae3887eeec79a # Fork with OAuth support
         with:
           # Option 1: Use Anthropic API key (commented out for OAuth)
           # anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

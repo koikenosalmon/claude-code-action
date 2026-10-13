@@ -614,7 +614,9 @@ describe("generatePrompt", () => {
 
     // For PR review comments, it should use the eventData.commentId if available, otherwise claudeCommentId
     expect(prompt).toContain('"commentId": 12345');
-    expect(prompt).toContain("mcp__github_file_ops__update_pull_request_comment");
+    expect(prompt).toContain(
+      "mcp__github_file_ops__update_pull_request_comment",
+    );
   });
 });
 
@@ -681,7 +683,9 @@ describe("buildAllowedToolsString", () => {
     expect(result).toContain("Read");
     expect(result).toContain("Write");
     expect(result).toContain("mcp__github_file_ops__update_issue_comment");
-    expect(result).not.toContain("mcp__github_file_ops__update_pull_request_comment");
+    expect(result).not.toContain(
+      "mcp__github_file_ops__update_pull_request_comment",
+    );
     expect(result).toContain("mcp__github_file_ops__commit_files");
     expect(result).toContain("mcp__github_file_ops__delete_files");
   });
@@ -705,7 +709,9 @@ describe("buildAllowedToolsString", () => {
     expect(result).toContain("Read");
     expect(result).toContain("Write");
     expect(result).not.toContain("mcp__github_file_ops__update_issue_comment");
-    expect(result).toContain("mcp__github_file_ops__update_pull_request_comment");
+    expect(result).toContain(
+      "mcp__github_file_ops__update_pull_request_comment",
+    );
     expect(result).toContain("mcp__github_file_ops__commit_files");
     expect(result).toContain("mcp__github_file_ops__delete_files");
   });

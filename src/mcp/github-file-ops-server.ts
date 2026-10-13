@@ -448,9 +448,12 @@ server.tool(
     repo: z.string().describe("Repository name"),
     title: z.string().describe("Issue title"),
     body: z.string().describe("Issue body/description"),
-    assignees: z.array(z.string()).optional().describe("Array of usernames to assign"),
+    assignees: z
+      .array(z.string())
+      .optional()
+      .describe("Array of usernames to assign"),
     labels: z.array(z.string()).optional().describe("Array of label names"),
-    milestone: z.number().optional().describe("Milestone number")
+    milestone: z.number().optional().describe("Milestone number"),
   },
   async ({ owner, repo, title, body, assignees, labels, milestone }) => {
     try {
@@ -462,9 +465,9 @@ server.tool(
       const createUrl = `${GITHUB_API_URL}/repos/${owner}/${repo}/issues`;
       const requestBody: any = {
         title,
-        body
+        body,
       };
-      
+
       if (assignees) requestBody.assignees = assignees;
       if (labels) requestBody.labels = labels;
       if (milestone) requestBody.milestone = milestone;
@@ -487,20 +490,24 @@ server.tool(
         );
       }
 
-      const result:any = await response.json();
-      
+      const result: any = await response.json();
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({
-              id: result.id,
-              number: result.number,
-              title: result.title,
-              state: result.state,
-              html_url: result.html_url,
-              created_at: result.created_at
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                id: result.id,
+                number: result.number,
+                title: result.title,
+                state: result.state,
+                html_url: result.html_url,
+                created_at: result.created_at,
+              },
+              null,
+              2,
+            ),
           },
         ],
       };
@@ -557,8 +564,8 @@ server.tool(
         );
       }
 
-      const result = await response.json();
-      
+      await response.json();
+
       return {
         content: [
           {
@@ -593,12 +600,31 @@ server.tool(
     repo: z.string().describe("Repository name"),
     title: z.string().describe("Pull request title"),
     body: z.string().describe("Pull request body/description"),
-    head: z.string().describe("The name of the branch where your changes are implemented"),
-    base: z.string().describe("The name of the branch you want the changes pulled into"),
-    draft: z.boolean().optional().describe("Whether to create the pull request as a draft"),
-    maintainer_can_modify: z.boolean().optional().describe("Whether maintainers can modify the pull request")
+    head: z
+      .string()
+      .describe("The name of the branch where your changes are implemented"),
+    base: z
+      .string()
+      .describe("The name of the branch you want the changes pulled into"),
+    draft: z
+      .boolean()
+      .optional()
+      .describe("Whether to create the pull request as a draft"),
+    maintainer_can_modify: z
+      .boolean()
+      .optional()
+      .describe("Whether maintainers can modify the pull request"),
   },
-  async ({ owner, repo, title, body, head, base, draft, maintainer_can_modify }) => {
+  async ({
+    owner,
+    repo,
+    title,
+    body,
+    head,
+    base,
+    draft,
+    maintainer_can_modify,
+  }) => {
     try {
       const githubToken = process.env.GITHUB_TOKEN;
       if (!githubToken) {
@@ -610,11 +636,12 @@ server.tool(
         title,
         body,
         head,
-        base
+        base,
       };
-      
+
       if (draft !== undefined) requestBody.draft = draft;
-      if (maintainer_can_modify !== undefined) requestBody.maintainer_can_modify = maintainer_can_modify;
+      if (maintainer_can_modify !== undefined)
+        requestBody.maintainer_can_modify = maintainer_can_modify;
 
       const response = await fetch(createUrl, {
         method: "POST",
@@ -634,22 +661,26 @@ server.tool(
         );
       }
 
-      const result:any = await response.json();
-      
+      const result: any = await response.json();
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({
-              id: result.id,
-              number: result.number,
-              title: result.title,
-              state: result.state,
-              html_url: result.html_url,
-              head: result.head.ref,
-              base: result.base.ref,
-              created_at: result.created_at
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                id: result.id,
+                number: result.number,
+                title: result.title,
+                state: result.state,
+                html_url: result.html_url,
+                head: result.head.ref,
+                base: result.base.ref,
+                created_at: result.created_at,
+              },
+              null,
+              2,
+            ),
           },
         ],
       };
@@ -677,16 +708,39 @@ server.tool(
   {
     owner: z.string().describe("Repository owner"),
     repo: z.string().describe("Repository name"),
-    state: z.enum(["open", "closed", "all"]).optional().describe("Issue state filter"),
-    labels: z.string().optional().describe("Comma-separated list of label names"),
+    state: z
+      .enum(["open", "closed", "all"])
+      .optional()
+      .describe("Issue state filter"),
+    labels: z
+      .string()
+      .optional()
+      .describe("Comma-separated list of label names"),
     assignee: z.string().optional().describe("Filter by assignee username"),
     creator: z.string().optional().describe("Filter by creator username"),
-    sort: z.enum(["created", "updated", "comments"]).optional().describe("Sort order"),
+    sort: z
+      .enum(["created", "updated", "comments"])
+      .optional()
+      .describe("Sort order"),
     direction: z.enum(["asc", "desc"]).optional().describe("Sort direction"),
-    per_page: z.number().optional().describe("Number of results per page (max 100)"),
-    page: z.number().optional().describe("Page number")
+    per_page: z
+      .number()
+      .optional()
+      .describe("Number of results per page (max 100)"),
+    page: z.number().optional().describe("Page number"),
   },
-  async ({ owner, repo, state, labels, assignee, creator, sort, direction, per_page, page }) => {
+  async ({
+    owner,
+    repo,
+    state,
+    labels,
+    assignee,
+    creator,
+    sort,
+    direction,
+    per_page,
+    page,
+  }) => {
     try {
       const githubToken = process.env.GITHUB_TOKEN;
       if (!githubToken) {
@@ -720,8 +774,8 @@ server.tool(
         );
       }
 
-      const issues:any = await response.json();
-      
+      const issues: any = await response.json();
+
       // Simplify the response
       const simplifiedIssues = issues.map((issue: any) => ({
         id: issue.id,
@@ -734,9 +788,9 @@ server.tool(
         assignees: issue.assignees.map((assignee: any) => assignee.login),
         created_at: issue.created_at,
         updated_at: issue.updated_at,
-        comments: issue.comments
+        comments: issue.comments,
       }));
-      
+
       return {
         content: [
           {
